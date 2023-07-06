@@ -1,0 +1,34 @@
+#! /usr/bin/env python
+#### Programme de correction orthographique via ChatGPT ######
+
+import openai
+import importlib
+
+#### Vérification de la librairie openai
+
+if importlib.util.find_spec("openai") is None:
+    import pip
+    pip.main(['install', 'openai'])
+    print("Installation de la librairie manquante")
+
+#### Fin de vérif
+
+
+
+
+
+## Clé API
+openai.api_key = 'clé API'
+## FIN KEY
+
+Phrase = input("Entrez la phrase : ")
+
+response = openai.Completion.create(
+    engine="text-davinci-003",
+    prompt=f"Corrige cette phrase sans rien modifier : <{Phrase}>",
+    max_tokens=50
+)
+
+correction = response.choices[0].text.strip()
+
+print(f"{correction}")
