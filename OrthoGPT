@@ -13,10 +13,6 @@ if importlib.util.find_spec("openai") is None:
 
 #### Fin de vérif
 
-
-
-
-
 ## Clé API
 openai.api_key = 'clé API'
 ## FIN KEY
