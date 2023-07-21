@@ -7,7 +7,7 @@ def menu():
     ok = False
     while not ok:
        
-        URL_PAGE = input("Entrez L'url : \n")
+        URL_PAGE = input("Entrez l'URL : \n")
         reponse = requests.get(URL_PAGE)
 
         if reponse.status_code == 200:
@@ -15,14 +15,14 @@ def menu():
             return reponse.content.decode()
           
         else:
-            print("Erreur d'URL ")
+            print("Erreur d'URL")
 
 Code_source = BeautifulSoup(menu(), 'html.parser')
 raw = Code_source.get_text()
 words = re.findall((r'\w+'), raw)
 
 compteur= {}
-Longeur = int(input("Quelle longeur minimum des mots ? :\n "))
+Longeur = int(input("Quelle est la longueur minimale des mots ? :\n "))
 
 for word in words:
 
@@ -32,13 +32,13 @@ for word in words:
         compteurATM = compteur.get(word)
         compteur[word] = compteurATM + 1
 
-NbrMots = int(input("Combiens de mots voulez vous : \n "))
+NbrMots = int(input("Combien de mots voulez-vous : \n "))
 
 top3 = sorted(compteur.items(), key=lambda item: item[1], reverse=True)
 if len(top3) < NbrMots:
-    print(f"Erreur il y a moins de mots que {NbrMots} relancez le script ")
+    print(f"Erreur, il y a moins de mots que {NbrMots}. Veuillez relancer le script.")
 else:
-    print("--- Début wordlist ---\n")
+    print("--- Début de la liste de mots ---\n")
     for i in range (NbrMots):
         print(f"{top3[i][0]}") # : {top3[i][1]} fois
-    print("\n --- Fin Wordlist ---")
+    print("\n--- Fin de la liste de mots ---")
