@@ -1,0 +1,44 @@
+#! python3 /bin/bash
+import requests
+import re
+from bs4 import BeautifulSoup
+
+def menu():
+    ok = False
+    while not ok:
+       
+        URL_PAGE = input("Entrez L'url : \n")
+        reponse = requests.get(URL_PAGE)
+
+        if reponse.status_code == 200:
+            ok = True
+            return reponse.content.decode()
+          
+        else:
+            print("Erreur d'URL ")
+
+Code_source = BeautifulSoup(menu(), 'html.parser')
+raw = Code_source.get_text()
+words = re.findall((r'\w+'), raw)
+
+compteur= {}
+Longeur = int(input("Quelle longeur minimum des mots ? :\n "))
+
+for word in words:
+
+    if word not in compteur and len(word) > Longeur:
+        compteur[word] = 1
+    elif word in compteur:
+        compteurATM = compteur.get(word)
+        compteur[word] = compteurATM + 1
+
+NbrMots = int(input("Combiens de mots voulez vous : \n "))
+
+top3 = sorted(compteur.items(), key=lambda item: item[1], reverse=True)
+if len(top3) < NbrMots:
+    print(f"Erreur il y a moins de mots que {NbrMots} relancez le script ")
+else:
+    print("--- Début wordlist ---\n")
+    for i in range (NbrMots):
+        print(f"{top3[i][0]}") # : {top3[i][1]} fois
+    print("\n --- Fin Wordlist ---")
