@@ -1,0 +1,119 @@
+#! /usr/bin/env python
+"""
+-> Votre programme proposera 3 options :
+
+- Oeufs à la coque : 3 minutes
+
+- Oeufs mollets : 6 minutes
+
+- Oeufs durs : 9 minutes
+
+
+
+Une fois l'option choisie, votre programme commencera à attendre la durée concernée.
+
+A chaque seconde, vous afficherez un "." sur une même ligne (afin que l'on voit un effet de progression).
+
+Et toutes les 10 secondes vous irez à la ligne suivante en affichant le temps restant.
+
+"""
+
+import time
+import beepy
+import os
+import colorama
+import random
+
+Banners= [ 
+"Pourquoi l'œuf a-t-il peur de l'eau bouillante ?\nParce qu'il a vu ce qui est arrivé à son copain dans la casserole !",
+
+"J'ai cru entendre l'œuf me dire 'Je m'en vais passer un mauvais quart d'heure'\navant de le plonger dans l'eau bouillante.",
+
+"Un œuf qui cuit, c'est un peu comme moi le lundi matin...\nça bouillonne à l'intérieur, mais ça reste coque en apparence.",
+
+"Si vous trouvez que faire cuire un œuf, c'est trop compliqué...\nessayez donc d'en pondre un !",
+
+"On dit que faire cuire un œuf, c'est simple comme bonjour.\nPourtant, j'en connais un qui a fini en omelette ce matin...",
+
+"Qui est le plus patient, l'œuf qui cuit\nou celui qui attend qu'il soit cuit ?",
+
+"J'ai demandé à mon œuf comment il aimait sa cuisson.\nIl m'a répondu : 'Sans commentaires !'",
+
+"Je comprends maintenant pourquoi l'œuf est une forme parfaite :\nc'est pour mieux rouler hors de la casserole.",
+
+"J'ai décidé de prendre mon temps pour faire cuire cet œuf...\nEt lui a décidé de prendre le sien pour durcir.",
+
+"Mon œuf a vécu un vrai thriller dans ma casserole.\nSuspense, eau bouillante... et une fin explosive en omelette !"
+]
+
+AsciiArt = """
+  , ; ,   .-'''''-.   , ; ,
+  \\|/  .'         '.  \|//
+   \-;-/   ()   ()   \-;-/
+   // ;               ; \\
+  //__; :.         .; ;__\\
+ `-----\'.'-.....-'.'/-----'
+        '.'.-.-,_.'.'
+          '(  (..-'
+            '-'
+            """
+
+#Gestion de la cuissons des oeufs
+def GestionCuisson(Cuisson):
+    if Cuisson == "1":
+        Temps = 3 
+        Mode = "Oeufs à la coque"
+    elif Cuisson == "2": 
+        Temps = 6 
+        Mode = "Oeufs mollets"
+    elif Cuisson == "3":
+        Temps = 9 
+        Mode = "Oeufs durs"
+
+    Temps_cuisson = Temps * 60
+
+    print(f"Cuisson {Mode} :")
+    print("Départ dans :",end = "", flush=True)
+    for i in range(3,0,-1):
+           print(f" {i}",end = "", flush=True)            
+           time.sleep(1)
+
+    print("\n ! ! ! Début cuisson ! ! ! ")
+    for i in range(Temps_cuisson,0,-1):
+        minutes, seconds = divmod(i, 60)
+        Pourcentage = int (100 - (i/ Temps_cuisson)*100 )# Transforme en %
+        if i % 10 == 0 and i != Temps_cuisson:
+            if Pourcentage < 50:
+                print(f"\n Temps restant : {colorama.Fore.RED}{minutes}mn{seconds}s ({Pourcentage}%){colorama.Style.RESET_ALL} \n")
+            elif Pourcentage < 75 and Pourcentage < 90:
+                print(f" Temps restant : {colorama.Fore.BLUE}{minutes}mn{seconds}s ({Pourcentage}%){colorama.Style.RESET_ALL}\n")
+            else:
+                print(f" Temps restant : {colorama.Fore.GREEN}{minutes}mn{seconds}s ({Pourcentage}%){colorama.Style.RESET_ALL}\n")
+        else:
+            print(".", end="", flush=True)
+        time.sleep(1)
+
+    print("!!! Cuisson terminée !!!")
+    beepy.beep("ready")
+    return
+
+#Gestion menu
+def Menu():
+    print("1 : Oeufs à la coque\n2 : Oeufs mollets\n3 : Oeufs durs")
+    Choix_cuisson = input("Votre choix de cuisson : ")
+    if Choix_cuisson == "1" or Choix_cuisson == "2" or Choix_cuisson == "3":
+        return str(Choix_cuisson)
+    else:
+        print(f"{colorama.Fore.RED}Ereur vous devez entrez un nombre 1,2 ou 3{colorama.Style.RESET_ALL}")
+        beepy.beep("error")
+        return Menu()
+
+
+
+print("\n",AsciiArt)
+Welcome = random.choice(Banners)
+print(f"{colorama.Fore.LIGHTBLUE_EX}{Welcome}{colorama.Style.RESET_ALL}\n")
+Durée = Menu()
+GestionCuisson(Durée)
+
+
